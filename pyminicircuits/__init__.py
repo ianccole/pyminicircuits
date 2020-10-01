@@ -199,6 +199,8 @@ class Switch(SwitchAttenuatorBase):
 
     CMD_GET_SWITCH_PORT = 15
 
+    CMD_SET_SWITCH_ALL = 9
+
     def set_active_port(self, port):
         """
         Set which port is connected to the COM port: 1-indexed.
@@ -214,3 +216,30 @@ class Switch(SwitchAttenuatorBase):
         d = self._cmd(self.CMD_GET_SWITCH_PORT)
         port = d[1]
         return port
+
+    def set_all_sp4t(self, switchA=0, switchB=0):
+        sA = 0
+        sB = 0
+        if switchA:
+            sA = 1 << switchA-1
+        if switchB:
+            sB = 1 << switchB-1
+
+        self._cmd(self.CMD_SET_SWITCH_ALL, sA|(switchB<<4))
+
+    def get_all_sp4t(self):
+        val = self.get_active_port()
+        sAraw = val & 0x0f
+        sBraw = val >> 4
+
+        sA = 0
+        while sAraw:
+            sAraw = sAraw >> 1
+            sA += 1
+
+        sB = 0
+        while sBraw:
+            sBraw = sBraw >> 1
+            sB += 1
+
+        return sA, sB
