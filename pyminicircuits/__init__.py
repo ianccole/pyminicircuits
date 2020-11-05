@@ -160,6 +160,49 @@ class SwitchAttenuatorBase(BaseInterface):
         d = self._cmd(self.CMD_GET_SERIAL_NUMBER)
         return self.parse_response_string(d)
 
+    CMD_SET_ETH = 250
+    CMD_GET_ETH = 251
+
+    CMD_GET_ETH_CFG = 253
+
+    CMD_SET_IP = 201
+    CMD_SET_SN = 202
+    CMD_USE_DHCP = 205
+    CMD_GET_DHCP = 207
+
+    CMD_RESET_ETH = 101
+
+    def set_IP(self, oc1, oc2, oc3, oc4):
+        res = self._cmd(self.CMD_SET_ETH, self.CMD_SET_IP, oc1, oc2, oc3, oc4)
+        return res
+
+    def get_IP(self):
+        res = self._cmd(self.CMD_GET_ETH, self.CMD_SET_IP)
+        return res
+
+    def set_SN(self, oc1, oc2, oc3, oc4):
+        res = self._cmd(self.CMD_SET_ETH, self.CMD_SET_SN, oc1, oc2, oc3, oc4)
+        return res
+
+    def get_SN(self):
+        res = self._cmd(self.CMD_GET_ETH, self.CMD_SET_SN)
+        return res
+
+    def set_dhcp_off(self):
+        res = self._cmd(self.CMD_SET_ETH, self.CMD_USE_DHCP, 0)
+        return res
+
+    def get_dhcp(self):
+        res = self._cmd(self.CMD_GET_ETH, self.CMD_GET_DHCP)
+        return res
+
+    def reset_eth(self):
+        res = self._cmd(self.CMD_RESET_ETH, self.CMD_RESET_ETH, 102, 103)
+        return res
+
+    def get_eth(self):
+        res = self._cmd(self.CMD_GET_ETH_CFG)
+        return res
 
 class Attenuator(SwitchAttenuatorBase):
     """
